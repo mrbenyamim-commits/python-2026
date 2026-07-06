@@ -11,6 +11,8 @@ resultado = dict(
     JUGADOR = 0
 )
 
+estados = ["IA", "empate", "JUGADOR"]
+
 opciones = ["piedra", "papel", "tijera"]
 
 def mejora(diccionario_ia, opcion):
@@ -27,7 +29,7 @@ def mejora(diccionario_ia, opcion):
         case "3" | "tijera":
             diccionario_ia["tijera"] += 1
 
-def eleccion_IA(ia,opciones, opcion, resultado):
+def eleccion_IA(ia, opciones, eleccion):
     match (ia["piedra"], ia["papel"], ia["tijera"]):
         # 1. Piedra es el mayor de todos
         case (p, pa, t) if p > pa and p > t:
@@ -55,14 +57,29 @@ def eleccion_IA(ia,opciones, opcion, resultado):
             eleccion = random.choice(opciones_filtradas)
     print(f"la IA a usado {eleccion}")
 
-print("hora de jugar piedra papel o tijera")
+def victorias(eleccion, el_IA, contador, estados):   
+    match (eleccion, el_IA, contador):
+        case (pj, ia, co) if pj == ia:
+            print("empate")
+            co["empate"] += 1
+        case (pj, ia, co) if (pj == "tijera" and ia == "piedra") | (pj == "papel" and ia == "tijera") | (pj == "piedra" and ia == "papel"):
+            print("la IA a gana")
+            co["AI"] += 1
+        case (pj, ia, co) if (ia == "tijera" and pj == "piedra") | (ia == "papel" and pj == "tijera") | (ia == "piedra" and pj == "papel"):
+            print("el jugador a ganado")
+            co["JUGADOR"] += 1
+    
 
-estados = ["AI", "EMPATE", "JUGADOR"]
+
+
+eleccion = "no"
+
+print("hora de jugar piedra papel o tijera")
 
 turno = 0
 fin ="no"
 
-while not(fin.upper == "SI" or fin.upper == "S"):
+while not(fin.upper() == "SI" or fin.upper() == "S"):
     turno += 1
     print(f"\n=====================turno:{turno}===================\n")
     opcion = input("eliga: \n1. piedra \n2. papel \n3. tijera \nelige: ")
@@ -77,14 +94,14 @@ while not(fin.upper == "SI" or fin.upper == "S"):
     if len(opcion) >= 5:
         print(f"\nel jugador uso: {opcion}")
 
-        eleccion_IA(IA, opciones, opcion, resultado)
-
-        print("\nvictorias actuales\n")
+        eleccion_IA(IA, opciones, eleccion)
 
         mejora(IA, opcion)
+
+        victorias(opcion, eleccion, resultado, estados)
 
         fin = input("desea terminar? (si/no)\n")
 
     else:
         turno -= 1
-        print("un dato fue ingresado incorrectamente")
+        print("un dato fue ingresado incorrectamente")  
