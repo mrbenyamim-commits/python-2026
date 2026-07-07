@@ -1,3 +1,0 @@
-Nota 1: Aprender a manejar archivos.
-Nota 2: Practicar con Python hoy por la tarde.
-Nota 3: Estudiar estructuras de datos.
